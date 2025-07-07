@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Phishing Link Scanner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            text-align: center;
+            padding: 50px;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            display: inline-block;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px #ccc;
+        }
+        input[type="text"] {
+            width: 300px;
+            padding: 10px;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            background: #4caf50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            background: #eee;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        .phishing { color: red; font-weight: bold; }
+        .safe { color: green; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Phishing Link Scanner</h1>
+    <form method="POST">
+        <input type="text" name="url" placeholder="Enter URL to scan" required>
+        <input type="submit" value="Scan">
+    </form>
+
+    {% if result %}
+    <div class="result">
+        <h3>Scan Result for: <i>{{ result.url }}</i></h3>
+        <p>Status: 
+            {% if result.is_phishing %}
+                <span class="phishing">⚠️ Likely Phishing</span>
+            {% else %}
+                <span class="safe">✅ Safe</span>
+            {% endif %}
+        </p>
+        <h4>Feature Breakdown:</h4>
+        <ul>
+            {% for key, value in result.features.items() %}
+                <li><b>{{ key.replace("_", " ").title() }}</b>: {{ value }}</li>
+            {% endfor %}
+        </ul>
+        <p><b>Heuristic Score:</b> {{ result.score }}/6</p>
+    </div>
+    {% endif %}
+</body>
+</html>
